@@ -7,7 +7,6 @@
     <title>Team List</title>
 </head>
 <body>
-<h1>Team List</h1>
 <ul id="teamlist">
 </ul>
 
@@ -20,7 +19,7 @@
 
         cobalt.init({
             debug: true,
-            debugInBrowser:true,
+            //debugInBrowser:true,
             events: {
                 "onPageShown": function (data, callback) {
                     cobalt.log('Display Team List...');
@@ -31,11 +30,15 @@
 
         
         cobalt.nativeBars.setActionVisible("team_add", true);
+        cobalt.nativeBars.setActionVisible("team_list", false);
+        cobalt.nativeBars.setBarContent({
+            "title": "Team List"
+        });
 
         cobalt.nativeBars.setEventListener(function (item, event) {
             switch (item) {
                 case "team_add":
-                    cobalt.navigate.modal({ page : "team_add.html"});
+                    cobalt.navigate.push({ page : "team_add.html"});
                     break;
                 default :
                     cobalt.log('An unknown button has been pressed.');

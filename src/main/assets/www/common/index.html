@@ -6,23 +6,20 @@
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<p>Welcome to the kikou app&nbsp;! Please use a pull-to-refresh gesture to change the message below. If it works,
-    then you are ready to build your first app :)</p>
-
-<p id="hello">Pull to refresh :)</p>
-<button id="testouille">ok</button>
+<h1>build your teams randomly!</h1>
+<div>
+    <label for="nb">
+        <input type="text" id="nb"/><button id="ok">OK</button>
+    </label>
+</div>
+<div id="team-list">
+</div>
 
 <script type="text/javascript" src="../platform/cobalt.js"></script>
 <script>
     cobalt.init({
-        debug: true,
+        debug: true
         //debugInBrowser:true,
-        events: {
-            "pullToRefresh": function (data, callback) {
-                cobalt.log('Refresh asked...');
-                pleaseRefresh(callback);
-            }
-        }
     });
 
    
@@ -44,8 +41,10 @@
         ]
     }
 
-cobalt.nativeBars.setActionVisible("team_add", false);
-     cobalt.nativeBars.setEventListener(function (item, event) {
+    cobalt.nativeBars.setActionVisible("home", false);
+    cobalt.nativeBars.setActionVisible("team_add", false);
+
+    cobalt.nativeBars.setEventListener(function (item, event) {
             cobalt.log(item);
             switch (item) {
                 case "team_list":
@@ -58,23 +57,78 @@ cobalt.nativeBars.setActionVisible("team_add", false);
             }
         });
 
-    var messages = ["Hello!", "Yes it works!", "Bonjour !", "guten Tag!", "Ola !"],
-        i = 0,
-        len = messages.length,
-        hello = document.getElementById("hello");
 
-    document.getElementById('testouille').addEventListener('click', function(){
-        cobalt.navigate.modal({ page : "team_add.html" });
-    });
-
-    function pleaseRefresh(callback) {
-        cobalt.log('refreshing content');
-        hello.innerHTML = messages[i++];
-        if (i >= len) {
-            i = 0;
+    var findPeoples = function() {
+        
+        //work with a copy of initial list
+        var peoplesTemp = peoples.slice();
+        
+        var nbPers = document.getElementById("txt-loto-nb").value;
+        //to avoid infinite loop
+        if (nbPers.length === 0) return;
+        
+        var team = [nbPers];
+        for (var i=0; i < nbPers;i++){
+           var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
+           team[i] = peoplesTemp.splice(n, 1);
+           
         }
-        cobalt.sendCallback(callback)
-    }
+       
+        //clear all:
+        document.getElementById("team-list").innerHTML = '';
+        displayTeam(team, "Hall of fame:");
+        
+        
+      }
+
+
+    var generateTeams = function() {
+        var peoples = cobalt.storage.get('peoples');
+        //work with a copy of initial list
+        var peoplesTemp = peoples.slice();
+        var nbPers = document.getElementById("nb").value;
+        //to avoid infinite loop
+        if (nbPers.length === 0) return;
+        var nbTeam = Math.floor(peoples.length / nbPers);
+        console.log("nbPers:" + nbPers + " - nbTeam:" + nbTeam);
+        var teams = [nbTeam];
+        for (var i = 0; i < nbTeam; i++) {
+          
+          var team = [nbPers];
+          for (var j = 0; j < nbPers; j++) {
+            var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
+            team[j] = peoplesTemp.splice(n, 1);
+          }
+          teams[i] = team;
+        }
+        displayTeams(teams);
+        //display orphans
+        displayTeam(peoplesTemp, "Team Orphan(s)");
+      }
+      var displayTeams = function(teams) {
+        //clear all:
+        document.getElementById("team-list").innerHTML = '';
+        for (var i = 0; i < teams.length; i++) {
+          displayTeam(teams[i], "Team " + i);
+        }
+      }
+      var displayTeam = function(team, name) {
+        var teamList = document.getElementById("team-list");
+        //title
+        var title = document.createElement("h3");
+        title.innerHTML = name;
+        teamList.appendChild(title);
+        var ul = document.createElement("ul");
+        for (var j = 0; j < team.length; j++) {
+          var li = document.createElement("li");
+          li.innerHTML = team[j];
+          ul.appendChild(li);
+        }
+        teamList.appendChild(ul);
+      }
+
+
+    document.getElementById('ok').addEventListener('click', generateTeams);
 </script>
 </body>
 </html>

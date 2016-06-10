@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>add a team mate</title>
+</head>
+<body>
+
+<div>
+    <label for="name">
+        <input type="text" id="name"/><button id="ok">OK</button>
+    </label>
+</div>
+
+<script type="text/javascript" src="../platform/cobalt.js"></script>
+<script>
+    cobalt.init({
+        debug: true,
+        debugInBrowser:true
+    });
+
+    var peoples = cobalt.storage.get('peoples');
+    if (typeof peoples == 'undefined') { 
+        peoples = [];
+    }
+    cobalt.log(peoples);
+
+    function store(){
+        var nameInput = document.getElementById('name');
+        //TODO check for valid input
+        peoples.push(nameInput.value);
+        cobalt.storage.set('peoples', peoples);
+
+        //return back to main page
+        cobalt.navigate.dismiss();
+    }
+
+
+    document.getElementById('ok').addEventListener('click', store);
+
+
+</script>
+</body>
+</html>

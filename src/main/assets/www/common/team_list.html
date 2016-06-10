@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>Team List</title>
+</head>
+<body>
+<h1>Team List</h1>
+<ul id="teamlist">
+</ul>
+
+<script type="text/javascript" src="../platform/cobalt.js"></script>
+<script>
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+
+        cobalt.init({
+            debug: true,
+            debugInBrowser:true,
+            events: {
+                "onPageShown": function (data, callback) {
+                    cobalt.log('Display Team List...');
+                    displayList(callback);
+                }
+            }
+        });
+
+        
+        cobalt.nativeBars.setActionVisible("team_add", true);
+
+        cobalt.nativeBars.setEventListener(function (item, event) {
+            switch (item) {
+                case "team_add":
+                    cobalt.navigate.modal({ page : "team_add.html"});
+                    break;
+                default :
+                    cobalt.log('An unknown button has been pressed.');
+                    break;
+            }
+        });
+
+        function displayList(){
+
+            var peoples = cobalt.storage.get('peoples');
+            if (typeof peoples == 'undefined') {
+                peoples = [];
+            }
+
+            var list = '';
+            for (var i = peoples.length - 1; i >= 0; i--) {
+                list += '<li>' + peoples[i] + '</li>';
+            }
+
+            document.getElementById('teamlist').innerHTML = list;
+
+
+        }
+
+
+    });
+
+</script>
+</body>
+</html>

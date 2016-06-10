@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<p>Welcome to the kikou app&nbsp;! Please use a pull-to-refresh gesture to change the message below. If it works,
+    then you are ready to build your first app :)</p>
+
+<p id="hello">Pull to refresh :)</p>
+<button id="testouille">ok</button>
+
+<script type="text/javascript" src="../platform/cobalt.js"></script>
+<script>
+    cobalt.init({
+        debug: true,
+        //debugInBrowser:true,
+        events: {
+            "pullToRefresh": function (data, callback) {
+                cobalt.log('Refresh asked...');
+                pleaseRefresh(callback);
+            }
+        }
+    });
+
+   
+
+
+   var team_list_bar = {
+        "visible": { "top" : true },
+        "title": "Team List",
+        "color" : "#FF69B4",
+        "backgroundColor": "#FFF",
+        "actions": [
+            {
+                "name": "team_add",
+                "title": "add a team member",
+                "icon" : "fa fa-plus",
+                "iosPosition": "topRight",
+                "androidPosition": "top"
+            }
+        ]
+    }
+
+cobalt.nativeBars.setActionVisible("team_add", false);
+     cobalt.nativeBars.setEventListener(function (item, event) {
+            cobalt.log(item);
+            switch (item) {
+                case "team_list":
+                  // cobalt.navigate.push({ page : "team_list.html", bars : team_list_bar });
+                  cobalt.navigate.push({ page : "team_list.html" });
+                    break;
+                default :
+                    barLog('An unknown button has been pressed.');
+                    break;
+            }
+        });
+
+    var messages = ["Hello!", "Yes it works!", "Bonjour !", "guten Tag!", "Ola !"],
+        i = 0,
+        len = messages.length,
+        hello = document.getElementById("hello");
+
+    document.getElementById('testouille').addEventListener('click', function(){
+        cobalt.navigate.modal({ page : "team_add.html" });
+    });
+
+    function pleaseRefresh(callback) {
+        cobalt.log('refreshing content');
+        hello.innerHTML = messages[i++];
+        if (i >= len) {
+            i = 0;
+        }
+        cobalt.sendCallback(callback)
+    }
+</script>
+</body>
+</html>

@@ -9,7 +9,16 @@
 <h1>build your teams randomly!</h1>
 <div>
     <label for="nb">
-        <input type="text" id="nb"/><button id="ok">OK</button>
+        <select id="nb">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+        <button id="ok">OK</button>
     </label>
 </div>
 <div id="team-list">
@@ -103,7 +112,10 @@
         }
         displayTeams(teams);
         //display orphans
-        displayTeam(peoplesTemp, "Team Orphan(s)");
+        if (peoplesTemp.length>0) {
+            displayTeam(peoplesTemp, "Team Orphan(s)");
+        }
+        
       }
       var displayTeams = function(teams) {
         //clear all:

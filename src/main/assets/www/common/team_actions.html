@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>rename or delete team mate</title>
+</head>
+<body>
+
+<div>
+    <label for="name">
+        <input type="text" id="name"/><button id="ok">OK</button>
+    </label>
+    
+</div>
+<button id="del">delete</button>
+
+<script type="text/javascript" src="../platform/cobalt.js"></script>
+<script>
+    cobalt.init({
+        debug: true,
+        //debugInBrowser:true
+        events: {
+            "onPageShown": function (data, callback) {
+                init();
+
+            }
+        }
+    });
+
+    cobalt.nativeBars.setActionVisible("team_list", false);
+    cobalt.nativeBars.setActionVisible("team_add", false);
+    cobalt.nativeBars.setBarContent({
+            "title": "Rename or delete a mate"
+        });
+
+    var peoples, selectedItem;
+
+    function init(){
+         //peoples = cobalt.storage.get('peoples');
+         selectedItem = cobalt.storage.get('selectedMate');
+         document.getElementById('name').value = selectedItem.name;
+    }
+
+    function rename(){
+        var nameInput = document.getElementById('name');
+        //TODO check for valid input
+        //peoples[selectedItem.id] = nameInput.value;
+
+        //cobalt.storage.set('peoples', peoples);
+
+        //return back to main page
+        cobalt.webLayer("dismiss", { action: 'rename', people: { id: selectedItem.id, name: nameInput.value}});
+    }
+
+    function remove(){
+        //peoples.splice(selectedItem.id, 1);
+        //cobalt.storage.set('peoples', peoples);
+        cobalt.webLayer("dismiss", { action: 'remove', people: { id: selectedItem.id}});
+    }
+
+
+
+
+    document.getElementById('ok').addEventListener('click', rename);
+    document.getElementById('del').addEventListener('click', remove);
+
+</script>
+</body>
+</html>

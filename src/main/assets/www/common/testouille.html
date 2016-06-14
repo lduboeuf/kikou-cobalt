@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>add a team mate</title>
+</head>
+<body>
+
+<div>
+    <label for="name">
+        <input type="text" id="name"/><button id="ok">OK</button>
+    </label>
+</div>
+
+
+<script>
+   
+    function kikou(){
+       console.log(this.id, this.value);
+    }
+
+
+    document.getElementById('ok').addEventListener('click', kikou);
+
+
+</script>
+</body>
+</html>

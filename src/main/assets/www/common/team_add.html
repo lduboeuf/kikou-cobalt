@@ -16,36 +16,33 @@
 
 <script type="text/javascript" src="../platform/cobalt.js"></script>
 <script>
-    cobalt.init({
-        debug: true,
-        //debugInBrowser:true
-    });
 
-    cobalt.nativeBars.setActionVisible("team_list", false);
-    cobalt.nativeBars.setActionVisible("team_add", false);
-    cobalt.nativeBars.setBarContent({
-            "title": "Add a mate"
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        cobalt.init({
+            debug: true,
+            //debugInBrowser:true
         });
 
-    var peoples = cobalt.storage.get('peoples');
-    if (typeof peoples == 'undefined') { 
-        peoples = [];
-    }
-    cobalt.log(peoples);
-
-    function store(){
-        var nameInput = document.getElementById('name');
-        //TODO check for valid input
-        peoples.push(nameInput.value);
-        cobalt.storage.set('peoples', peoples);
-
-        //return back to main page
-        cobalt.navigate.pop();
-    }
+        cobalt.nativeBars.setActionVisible("team_list", false);
+        cobalt.nativeBars.setActionVisible("team_add", false);
+        cobalt.nativeBars.setBarContent({
+                "title": "Add a mate"
+            });
 
 
-    document.getElementById('ok').addEventListener('click', store);
+        function store(){
+            var nameInput = document.getElementById('name');
+            //TODO check for valid input
+            //return back to main page
+            cobalt.navigate.pop({ action: "add", people: { name: nameInput.value}});
+        }
 
+
+        document.getElementById('ok').addEventListener('click', store);
+
+    });
 
 </script>
 </body>

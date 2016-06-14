@@ -10,6 +10,7 @@
 <div>
     <label for="nb">
         <select id="nb">
+            <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -18,70 +19,40 @@
             <option value="7">7</option>
             <option value="8">8</option>
         </select>
-        <button id="ok">OK</button>
+        <button id="gen_teams">Generate Teams</button>
+        <button id="gen_peoples">Choose Peoples</button>
     </label>
 </div>
 <div id="team-list">
 </div>
 
 <script type="text/javascript" src="../platform/cobalt.js"></script>
+<script type="text/javascript" src="app.js"></script>
 <script>
-    cobalt.init({
-        debug: true
-        //debugInBrowser:true,
-    });
-
-   
-
-
-   var team_list_bar = {
-        "visible": { "top" : true },
-        "title": "Team List",
-        "color" : "#FF69B4",
-        "backgroundColor": "#FFF",
-        "actions": [
-            {
-                "name": "team_add",
-                "title": "add a team member",
-                "icon" : "fa fa-plus",
-                "iosPosition": "topRight",
-                "androidPosition": "top"
-            }
-        ]
-    }
-
-    cobalt.nativeBars.setActionVisible("home", false);
-    cobalt.nativeBars.setActionVisible("team_add", false);
-
-    cobalt.nativeBars.setEventListener(function (item, event) {
-            cobalt.log(item);
-            switch (item) {
-                case "team_list":
-                  // cobalt.navigate.push({ page : "team_list.html", bars : team_list_bar });
-                  cobalt.navigate.push({ page : "team_list.html" });
-                    break;
-                default :
-                    barLog('An unknown button has been pressed.');
-                    break;
-            }
-        });
 
 
     var findPeoples = function() {
-        
-        //work with a copy of initial list
-        var peoplesTemp = peoples.slice();
-        
-        var nbPers = document.getElementById("txt-loto-nb").value;
+        var peoples = TeamList.getAll();
+
+        //define an array of indices
+        var idxs = peoples.map(function (x, i) { return i });
+
+        var nbPers = document.getElementById("nb").value;
         //to avoid infinite loop
         if (nbPers.length === 0) return;
         
         var team = [nbPers];
-        for (var i=0; i < nbPers;i++){
-           var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
-           team[i] = peoplesTemp.splice(n, 1);
+        var idx, n;
+        var nb = Math.min(nbPers, peoples.length);
+
+        for (var i=0; i < nb;i++){
+           n = Math.floor(Math.random() * (idxs.length - 1));
+           idx = idxs.splice(n, 1);
+           team[i] = peoples[idx];
            
         }
+
+        cobalt.log(team);
        
         //clear all:
         document.getElementById("team-list").innerHTML = '';
@@ -92,31 +63,42 @@
 
 
     var generateTeams = function() {
-        var peoples = cobalt.storage.get('peoples');
-        //work with a copy of initial list
-        var peoplesTemp = peoples.slice();
+        var peoples = TeamList.getAll();
+        cobalt.log(peoples);
+        //define an array of indices
+        var idxs = peoples.map(function (x, i) { return i });
+
+
         var nbPers = document.getElementById("nb").value;
         //to avoid infinite loop
         if (nbPers.length === 0) return;
         var nbTeam = Math.floor(peoples.length / nbPers);
         console.log("nbPers:" + nbPers + " - nbTeam:" + nbTeam);
+
+        var idx, n;
         var teams = [nbTeam];
         for (var i = 0; i < nbTeam; i++) {
           
           var team = [nbPers];
           for (var j = 0; j < nbPers; j++) {
-            var n = Math.floor(Math.random() * (peoplesTemp.length - 1));
-            team[j] = peoplesTemp.splice(n, 1);
+            n = Math.floor(Math.random() * (idxs.length - 1));
+            idx = idxs.splice(n, 1);
+            team[j] = peoples[idx];
           }
           teams[i] = team;
         }
+
         displayTeams(teams);
         //display orphans
-        if (peoplesTemp.length>0) {
-            displayTeam(peoplesTemp, "Team Orphan(s)");
+        if (idxs.length>0) {
+            var team = idxs.map(function (x, i) { return peoples[x] });
+
+            displayTeam(team, "Team Orphan(s)");
         }
         
       }
+
+
       var displayTeams = function(teams) {
         //clear all:
         document.getElementById("team-list").innerHTML = '';
@@ -124,23 +106,55 @@
           displayTeam(teams[i], "Team " + i);
         }
       }
+
+
       var displayTeam = function(team, name) {
         var teamList = document.getElementById("team-list");
         //title
         var title = document.createElement("h3");
         title.innerHTML = name;
         teamList.appendChild(title);
+
         var ul = document.createElement("ul");
         for (var j = 0; j < team.length; j++) {
           var li = document.createElement("li");
-          li.innerHTML = team[j];
+          li.innerHTML = team[j].name;
           ul.appendChild(li);
         }
         teamList.appendChild(ul);
       }
 
 
-    document.getElementById('ok').addEventListener('click', generateTeams);
+    document.addEventListener("DOMContentLoaded", function() {
+
+        cobalt.init({
+            debug: true
+            //debugInBrowser:true
+        });
+
+        cobalt.nativeBars.setActionVisible("team_add", false);
+
+        cobalt.nativeBars.setEventListener(function (item, event) {
+                cobalt.log(item);
+                switch (item) {
+                    case "team_list":
+                        cobalt.navigate.push({ page : "team_list.html" });
+                        break;
+                    default :
+                        cobalt.log('An unknown button has been pressed.');
+                        break;
+                }
+            });
+
+
+        document.getElementById('gen_teams').addEventListener('click', generateTeams);
+        document.getElementById('gen_peoples').addEventListener('click', findPeoples);
+
+    });
+
+
+
+   
 </script>
 </body>
 </html>

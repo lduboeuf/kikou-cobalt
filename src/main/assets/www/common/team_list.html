@@ -11,28 +11,111 @@
 </ul>
 
 <script type="text/javascript" src="../platform/cobalt.js"></script>
+<script type="text/javascript" src="app.js"></script>
 <script>
+
+
+
+    
+
+    function showForm(){
+            cobalt.storage.set('selectedMate', { id: this.id, name: this.innerHTML });
+            cobalt.webLayer("show","team_actions.html");
+        }
+
+    function displayList(peoples){
+        
+
+        var teamList = document.getElementById("teamlist");
+        teamList.innerHTML = ''; //clean
+
+        peoples.forEach(function(people) {
+          var li = document.createElement("li");
+          li.id = people.id;
+          li.onclick = showForm;
+          li.innerHTML = people.name;
+          teamList.appendChild(li);
+        });
+
+        // for (var j = 0; j < peoples.length; j++) {
+        //   var li = document.createElement("li");
+        //   li.id = peoples[j].id;
+        //   li.onclick = showForm;
+        //   li.innerHTML = peoples[j].name;
+        //   teamList.appendChild(li);
+        // }
+
+    }
+
+    function handleEvent(data)  {
+
+        if (data){
+            cobalt.log(data);
+            var people = data.people;
+
+            switch (data.action) {
+
+                    case "rename":
+                        TeamList.save(people);
+                        break;
+                    case "remove":
+                        TeamList.remove(people.id);
+                        break;
+                    case "add":
+                        TeamList.save(people);
+                        break;
+                    default :
+                        cobalt.log('unknown action.');
+                        break;
+            }
+        }
+        
+
+
+        var peoples = TeamList.getAll();
+        cobalt.log(peoples);
+        if (typeof peoples == 'undefined') {
+            peoples = [];
+        }
+
+        displayList(peoples);
+
+
+
+
+    }
 
 
     document.addEventListener("DOMContentLoaded", function() {
 
-
         cobalt.init({
             debug: true,
+            //debugInBrowser:true,
             events: {
-                "onPageShown": function (data, callback) {
+                onPageShown: function (data, callback) {
                     cobalt.log('Display Team List...');
-                    displayList(callback);
+                    init();
+                    handleEvent(data);
+                },
+                onWebLayerDismissed : function( data, callback ){
+                    init();
+                    handleEvent(data.data);
                 }
             }
         });
 
+        function init(){
+            cobalt.nativeBars.setActionVisible("team_add", true);
+            cobalt.nativeBars.setActionVisible("team_list", false);
+            cobalt.nativeBars.setBarContent({
+                "title": "Team List"
+            });
+
+        }
+           
+
         
-        cobalt.nativeBars.setActionVisible("team_add", true);
-        cobalt.nativeBars.setActionVisible("team_list", false);
-        cobalt.nativeBars.setBarContent({
-            "title": "Team List"
-        });
+        
 
         cobalt.nativeBars.setEventListener(function (item, event) {
             switch (item) {
@@ -45,22 +128,11 @@
             }
         });
 
-        function displayList(){
+        
 
-            var peoples = cobalt.storage.get('peoples');
-            if (typeof peoples == 'undefined') {
-                peoples = [];
-            }
+        //cobalt.events.onPageShown();
+        //displayList();
 
-            var list = '';
-            for (var i = peoples.length - 1; i >= 0; i--) {
-                list += '<li>' + peoples[i] + '</li>';
-            }
-
-            document.getElementById('teamlist').innerHTML = list;
-
-
-        }
 
 
     });

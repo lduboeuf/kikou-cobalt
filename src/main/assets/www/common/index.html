@@ -20,7 +20,7 @@
             <option value="8">8</option>
         </select>
         <button id="gen_teams">Generate Teams</button>
-        <button id="gen_peoples">Choose Peoples</button>
+        <button id="gen_peoples">Find volonteer(s)</button>
     </label>
 </div>
 <div id="team-list">
@@ -32,7 +32,7 @@
 
 
     var findPeoples = function() {
-        var peoples = TeamList.getAll();
+        var peoples = app.getPeoples();
 
         //define an array of indices
         var idxs = peoples.map(function (x, i) { return i });
@@ -46,7 +46,8 @@
         var nb = Math.min(nbPers, peoples.length);
 
         for (var i=0; i < nb;i++){
-           n = Math.floor(Math.random() * (idxs.length - 1));
+           //n = Math.floor(Math.random() * (idxs.length - 1));
+           n = Math.floor(Math.random() * idxs.length);
            idx = idxs.splice(n, 1);
            team[i] = peoples[idx];
            
@@ -63,7 +64,7 @@
 
 
     var generateTeams = function() {
-        var peoples = TeamList.getAll();
+        var peoples = app.getPeoples();
         cobalt.log(peoples);
         //define an array of indices
         var idxs = peoples.map(function (x, i) { return i });
@@ -81,7 +82,8 @@
           
           var team = [nbPers];
           for (var j = 0; j < nbPers; j++) {
-            n = Math.floor(Math.random() * (idxs.length - 1));
+            n = Math.floor(Math.random() * idxs.length);
+            //n = Math.floor(Math.random() * (idxs.length - 1));
             idx = idxs.splice(n, 1);
             team[j] = peoples[idx];
           }

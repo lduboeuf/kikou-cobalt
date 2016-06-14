@@ -17,13 +17,14 @@
 <button id="del">delete</button>
 
 <script type="text/javascript" src="../platform/cobalt.js"></script>
+<script type="text/javascript" src="app.js"></script>
 <script>
     cobalt.init({
         debug: true,
         //debugInBrowser:true
         events: {
             "onPageShown": function (data, callback) {
-                init();
+                init(data);
 
             }
         }
@@ -37,27 +38,39 @@
 
     var peoples, selectedItem;
 
-    function init(){
+    function init(data){
          //peoples = cobalt.storage.get('peoples');
-         selectedItem = cobalt.storage.get('selectedMate');
+         selectedItem = data.people;
          document.getElementById('name').value = selectedItem.name;
     }
 
     function rename(){
         var nameInput = document.getElementById('name');
-        //TODO check for valid input
-        //peoples[selectedItem.id] = nameInput.value;
 
-        //cobalt.storage.set('peoples', peoples);
+        //TODO check for valid input
+        selectedItem.name = nameInput.value;
+        app.save(selectedItem);
 
         //return back to main page
-        cobalt.webLayer("dismiss", { action: 'rename', people: { id: selectedItem.id, name: nameInput.value}});
+        cobalt.navigate.pop();
     }
 
     function remove(){
         //peoples.splice(selectedItem.id, 1);
         //cobalt.storage.set('peoples', peoples);
-        cobalt.webLayer("dismiss", { action: 'remove', people: { id: selectedItem.id}});
+        cobalt.alert({ 
+            title : "r u sure?", 
+            buttons : ["Yes", "No"], 
+            callback:function(data){ 
+                if (data.index==0){
+                    app.remove(selectedItem.id);
+                    cobalt.navigate.pop();
+                } 
+            }
+        });
+
+
+        
     }
 
 

@@ -19,11 +19,22 @@
     
 
     function showForm(){
-            cobalt.storage.set('selectedMate', { id: this.id, name: this.innerHTML });
-            cobalt.webLayer("show","team_actions.html");
+            //cobalt.storage.set('selectedMate', { id: this.id, name: this.innerHTML });
+            //cobalt.webLayer("show","team_actions.html");
+            cobalt.navigate.push({ page : "team_actions.html", data :{ people :  { id: this.id, name: this.innerHTML } } });
         }
 
-    function displayList(peoples){
+    function displayList(){
+
+        var peoples = app.getPeoples();
+        cobalt.log(peoples);
+        if (typeof peoples == 'undefined') {
+            peoples = [];
+        }
+
+        if (peoples.length==0){
+            cobalt.toast("no member found, please use 'plus' button in header");
+        }
         
 
         var teamList = document.getElementById("teamlist");
@@ -37,53 +48,10 @@
           teamList.appendChild(li);
         });
 
-        // for (var j = 0; j < peoples.length; j++) {
-        //   var li = document.createElement("li");
-        //   li.id = peoples[j].id;
-        //   li.onclick = showForm;
-        //   li.innerHTML = peoples[j].name;
-        //   teamList.appendChild(li);
-        // }
 
     }
 
-    function handleEvent(data)  {
 
-        if (data){
-            cobalt.log(data);
-            var people = data.people;
-
-            switch (data.action) {
-
-                    case "rename":
-                        TeamList.save(people);
-                        break;
-                    case "remove":
-                        TeamList.remove(people.id);
-                        break;
-                    case "add":
-                        TeamList.save(people);
-                        break;
-                    default :
-                        cobalt.log('unknown action.');
-                        break;
-            }
-        }
-        
-
-
-        var peoples = TeamList.getAll();
-        cobalt.log(peoples);
-        if (typeof peoples == 'undefined') {
-            peoples = [];
-        }
-
-        displayList(peoples);
-
-
-
-
-    }
 
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -95,12 +63,13 @@
                 onPageShown: function (data, callback) {
                     cobalt.log('Display Team List...');
                     init();
-                    handleEvent(data);
+                    displayList();
                 },
-                onWebLayerDismissed : function( data, callback ){
-                    init();
-                    handleEvent(data.data);
-                }
+                //called after rename or delete event
+                // onWebLayerDismissed : function( data, callback ){
+                //     init();
+                //     displayList();
+                // }
             }
         });
 

@@ -26,6 +26,9 @@ var app = {
         save: function(people){
 
             var peoples = this.getPeoples();
+            if(!peoples){
+            	peoples = [];
+            }
             if (typeof people.id == 'undefined'){
                 var id = 1;
                 if(peoples.length>0){

@@ -3,14 +3,24 @@ body, html {
 }
 
 
-
-
-
 body {
     height: 100%;
     background: #FFF;
     color: black;
     font-family: "Helvetica Neue Light", Helvetica, Arial, sans-serif;
+}
+
+header {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1em;
+}
+
+div{
+  padding: 0.5em;
+}
+
+.divsep{
+  border-bottom: 1px solid #ccc;
 }
 
 ul {
@@ -24,8 +34,35 @@ li {
   border-bottom: 1px solid #ccc;
 }
 
-p {
-    margin: 30px;
+
+h1 {
+  font-size: 1.2rem;
+}
+
+button {
+  background: #4183d7 none repeat scroll 0 0;
+  color: #fff;
+  border: medium none;
+}
+
+select, input {
+  background: transparent none repeat scroll 0 0;
+  color: #1a1a1a;
+  border: 1px solid #ccc;
+}
+
+
+button, select, input {
+    border-radius: 4px;
+    padding: 0.5em;
+    font-weight: 600;
+    margin-left: 0.5em;
+}
+
+button.delete{
+  width:100%;
+  background-color: #FF4444;
+
 }
 
 

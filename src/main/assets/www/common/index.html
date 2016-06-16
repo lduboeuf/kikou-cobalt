@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<header>
 <h1>build your teams randomly!</h1>
-<div>
     <label for="nb">
         <select id="nb">
             <option value="1">1</option>
@@ -22,7 +22,7 @@
         <button id="gen_teams">Generate Teams</button>
         <button id="gen_peoples">Find volonteer(s)</button>
     </label>
-</div>
+</header>
 <div id="team-list">
 </div>
 
@@ -130,7 +130,7 @@
     document.addEventListener("DOMContentLoaded", function() {
 
         cobalt.init({
-            debug: true
+            debug: true,
             //debugInBrowser:true
         });
 

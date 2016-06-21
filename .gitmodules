@@ -1,0 +1,6 @@
+[submodule "Fonts-FontAwesome-Android"]
+	path = Fonts-FontAwesome-Android
+	url = https://github.com/Cobaltians-Fonts/Fonts-FontAwesome-Android.git
+[submodule "cobalt"]
+	path = cobalt
+	url = https://github.com/cobaltians/Cobalt-Android.git

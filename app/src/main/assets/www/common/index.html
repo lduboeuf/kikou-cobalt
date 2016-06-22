@@ -139,13 +139,13 @@
             //debugInBrowser:true
         });
 
-        cobalt.nativeBars.setActionVisible("team_add", false);
+        //cobalt.nativeBars.setActionVisible("team_add", false);
 
         cobalt.nativeBars.setEventListener(function (item, event) {
                 cobalt.log(item);
                 switch (item) {
                     case "team_list":
-                        cobalt.navigate.push({ page : "team_list.html" });
+                        cobalt.navigate.push({ page : "team_list.html", controller:'team_list' });
                         break;
                     default :
                         cobalt.log('An unknown button has been pressed.');

@@ -10,11 +10,9 @@
 <div>
     <div class="divsep">
         <label for="name"></label>
-        <input type="text" name="name" id="name"/><!-- <button id="ok">rename</button> -->
+        <input type="text" name="name" id="name"/>
     </div>
-   <!--  <div>
-        <button id="del" class="delete">delete</button>
-    </div> -->
+
 </div>
 
 
@@ -32,11 +30,7 @@
         }
     });
 
-    // cobalt.nativeBars.setActionVisible("team_list", false);
-    // cobalt.nativeBars.setActionVisible("team_add", false);
-    // cobalt.nativeBars.setBarContent({
-    //         "title": "Rename or delete a mate"
-    //     });
+
      cobalt.nativeBars.setEventListener(function (item, event) {
             switch (item) {
                 case "delete":

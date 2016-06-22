@@ -10,7 +10,7 @@
 
 <div>
     <label for="name">
-        <input type="text" id="name"/><!-- <button id="ok">OK</button> -->
+        <input type="text" id="name"/>
     </label>
 </div>
 
@@ -25,12 +25,6 @@
             debug: true,
             //debugInBrowser:true
         });
-
-        // cobalt.nativeBars.setActionVisible("team_list", false);
-        // cobalt.nativeBars.setActionVisible("team_add", false);
-        // cobalt.nativeBars.setBarContent({
-        //         "title": "Add a mate"
-        //     });
 
         cobalt.nativeBars.setEventListener(function (item, event) {
             switch (item) {

@@ -14,6 +14,49 @@
 <script type="text/javascript" src="app.js"></script>
 <script>
 
+var actionsBar = {
+        "visible": { "top" : true },
+        "backgroundColor": "#FF4444",
+        "color": "FFF",
+        "title": "Rename or delete a mate",                   
+        "actions": [
+            {
+                "name": "delete",
+                "icon" : "fa fa-trash",
+                "title" : "Remove",
+                "backgroundColor": "#FF4444",
+                "color": "FFF",
+                "iosPosition": "topRight",
+                "androidPosition": "top"
+            },
+            {
+                "name": "rename",
+                "icon" : "fa fa-check",
+                "title" : "Rename",
+                "backgroundColor": "#FF4444",
+                "color": "FFF",
+                "iosPosition": "topRight",
+                "androidPosition": "top"
+            },
+        ]
+    };
+    var addBar = {
+            "visible": { "top" : true },
+            "backgroundColor": "#FF4444",
+            "color": "FFF",
+            "title": "add a mate",                   
+            "actions": [
+                {
+                    "name": "add",
+                    "icon" : "fa fa-check",
+                    "title" : "Add",
+                    "backgroundColor": "#FF4444",
+                    "color": "FFF",
+                    "iosPosition": "topRight",
+                    "androidPosition": "top"
+                }
+            ]
+        };
 
 
     
@@ -21,7 +64,7 @@
     function showForm(){
             //cobalt.storage.set('selectedMate', { id: this.id, name: this.innerHTML });
             //cobalt.webLayer("show","team_actions.html");
-            cobalt.navigate.push({ page : "team_actions.html", data :{ people :  { id: this.id, name: this.innerHTML } } });
+            cobalt.navigate.push({ page : "team_actions.html", data :{ people :  { id: this.id, name: this.innerHTML } }, bars : actionsBar });
         }
 
     function displayList(){
@@ -89,7 +132,7 @@
         cobalt.nativeBars.setEventListener(function (item, event) {
             switch (item) {
                 case "team_add":
-                    cobalt.navigate.push({ page : "team_add.html"});
+                    cobalt.navigate.push({ page : "team_add.html",  bars : addBar });
                     break;
                 default :
                     cobalt.log('An unknown button has been pressed.');

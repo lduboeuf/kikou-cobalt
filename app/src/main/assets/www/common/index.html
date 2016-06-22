@@ -73,6 +73,7 @@
         var nbPers = document.getElementById("nb").value;
         //to avoid infinite loop
         if (nbPers.length === 0) return;
+
         var nbTeam = Math.floor(peoples.length / nbPers);
         console.log("nbPers:" + nbPers + " - nbTeam:" + nbTeam);
 
@@ -90,13 +91,17 @@
           teams[i] = team;
         }
 
-        displayTeams(teams);
-        //display orphans
+       
+        //any orphans ?
         if (idxs.length>0) {
-            var team = idxs.map(function (x, i) { return peoples[x] });
-
-            displayTeam(team, "Team Orphan(s)");
+            //add them to first team and so on
+            for (var i = 0; i < idxs.length; i++){
+                idx = idxs.splice(n, 1);
+                teams[i].push(peoples[idx]);
+            }
         }
+
+         displayTeams(teams);
         
       }
 

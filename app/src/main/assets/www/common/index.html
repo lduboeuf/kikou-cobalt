@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>build your teams randomly!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
     <link rel="stylesheet" href="style.css"/>
@@ -8,7 +9,6 @@
 <body>
 <header>
 <h1>build your teams randomly!</h1>
-    <label for="nb">
         <select id="nb">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -21,7 +21,6 @@
         </select>
         <button id="gen_teams">Generate Teams</button>
         <button id="gen_peoples">Find volonteer(s)</button>
-    </label>
 </header>
 <div id="team-list">
 </div>
@@ -91,17 +90,22 @@
           teams[i] = team;
         }
 
-       
+       displayTeams(teams);
         //any orphans ?
         if (idxs.length>0) {
             //add them to first team and so on
-            for (var i = 0; i < idxs.length; i++){
-                idx = idxs.splice(n, 1);
-                teams[i].push(peoples[idx]);
-            }
+            // for (var i = 0; i < idxs.length; i++){
+            //     idx = idxs.splice(n, 1);
+            //     teams[i].push(peoples[idx]);
+            // }
+            var team = idxs.map(function (x, i) { return peoples[x] });
+            displayTeam(team, "Team Orphan(s)");
+
         }
 
-         displayTeams(teams);
+         
+         //hack
+        // window.scrollTo(0,0);
         
       }
 
@@ -112,6 +116,7 @@
         for (var i = 0; i < teams.length; i++) {
           displayTeam(teams[i], "Team " + i);
         }
+        
       }
 
 

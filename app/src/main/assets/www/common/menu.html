@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>Team Tool Box Menu</title>
+    <style>
+        #menu{
+            font-weight: bold;
+        }
+        #menu ul{
+             border-top: 1px solid #333;
+         }
+        #menu li {
+            border-bottom: 1px solid #333;
+        }
+        #menu li.selected{
+            background: #19E9FF;
+            color: #005D67;
+        }
+
+    </style>
+</head>
+<body>
+<ul id="menu">
+    <li data-id="home" class="selected">Home</li>
+    <li data-id="team_list">Team List</li>
+    <li data-id="team_archive">Archives</li>
+</ul>
+
+<script type="text/javascript" src="../platform/cobalt.js"></script>
+<script>
+
+        var items = {
+            "home": {id: "home", page: "index.html", controller: "default", name:"Team ToolBox", selected:true},
+            "team_list": {id: "team_list", page: "team_list.html", controller: "team_list", name:"Team List"}
+        }
+
+
+        cobalt.init({
+            debug: true,
+            //debugInBrowser:true
+        });
+
+        var menu_items = document.querySelectorAll('#menu li');
+        for (var i=0; i < menu_items.length; i++){
+          menu_items[i].onclick = function(){
+            var item_id = this.getAttribute('data-id');
+            this.classList.toggle('selected');
+            var item = items[item_id];
+            cobalt.log('menu click for', item);
+            cobalt.sendEvent('sidemenu:switch',item);
+          }
+        }
+
+
+</script>
+</body>
+</html>
